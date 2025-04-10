@@ -1,10 +1,18 @@
-import type { Metadata } from "next"
 import "styles/globals.css"
+import { createTranslator, getCookieLang } from "@/i18n"
 
 
-export const metadata: Metadata = {
-  title: "Sample App",
-  description: "Sample Description",
+export async function generateMetadata() {
+  const locale = await getCookieLang()
+  const t = await createTranslator(locale, "Layout")
+
+  return {
+    title: {
+      template: "%s / " + t("title"),
+      default: t("title"),
+    },
+    description: t("description"),
+  }
 }
 
 export default function RootLayout({

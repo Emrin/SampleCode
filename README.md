@@ -2,10 +2,9 @@
 
 # Run
 ```npm
-npm i
-npm run dev
+npm run dev:docker:bump
 ```
-Open http://127.0.0.1:3000
+Open http://127.0.0.1
 
 ## Tech
 - TypeScript (Language)
