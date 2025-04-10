@@ -10,8 +10,8 @@ import { hash } from "bcryptjs"
 
 const schema = z.object({
   username: z.string().trim().min(3).max(20).regex(/^[a-zA-Z0-9_]+$/),
-  password: z.string().min(8).max(256).trim(),
-  confirm_password: z.string().min(8).max(256).trim(),
+  password: z.string().trim().min(8).max(256),
+  confirm_password: z.string().trim().min(8).max(256),
   terms: z.preprocess((input) => !!input, z.boolean()),
 })
   .refine((data) => data.password === data.confirm_password, {

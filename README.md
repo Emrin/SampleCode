@@ -4,7 +4,7 @@
 ```npm
 npm run dev:docker:bump
 ```
-Open http://127.0.0.1
+Click -> http://127.0.0.1 <-
 
 ## Tech
 - TypeScript (Language)
@@ -20,7 +20,7 @@ Open http://127.0.0.1
 - Stateless Sessions
 - Redis Cache
 - Postgres Database
-- Works without JS enabled for maximum security (+ shows deeper knowledge of the underlying framework)
+- Works without JS enabled for maximum security (+ demonstrates a deeper understanding of the underlying frameworks)
 - CSRF protection through request headers check + exclusive POST requests
 - Basic Secure Authentication
 - 
