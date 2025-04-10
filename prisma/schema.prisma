@@ -12,7 +12,7 @@ model User {
   id String @id @default(cuid())
 
   username String @unique @db.VarChar(20)
-  password String @db.VarChar(255)
+  password String @db.VarChar(255) // Hash
   logins   Int    @default(1)
 
   currency FiatCurrency @default(eur)

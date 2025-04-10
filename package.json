@@ -11,6 +11,11 @@
     "lint": "next lint",
     "type-check": "tsc",
     "prepare": "husky",
+    "prisma:update": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "dev:docker:build": "docker compose -f docker-compose.dev.yml build",
+    "dev:docker:up": "docker compose -f docker-compose.dev.yml up -d",
+    "dev:docker:bump": "docker compose -f docker-compose.dev.yml up -d --build",
     "prisma:seed": "tsx prisma/seed.ts"
   },
   "prisma": {
