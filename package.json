@@ -2,26 +2,54 @@
   "name": "sample-app",
   "version": "0.1.0",
   "private": true,
+  "author": "Emrin Angelov",
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "next telemetry disable",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc",
+    "prepare": "husky",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.6.1",
+    "@prisma/client": "^6.6.0",
+    "ioredis": "^5.6.0",
+    "iron-session": "^8.0.4",
+    "negotiator": "^1.0.0",
+    "next": "15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.0"
+    "server-only": "^0.0.1",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/negotiator": "^0.6.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "cssnano": "^7.0.6",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
-    "@eslint/eslintrc": "^3"
+    "eslint-config-prettier": "^10.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "prisma": "^6.6.0",
+    "stylelint": "^16.18.0",
+    "stylelint-config-html": "^1.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

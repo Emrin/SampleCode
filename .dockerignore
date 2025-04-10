@@ -1,0 +1,13 @@
+# Things that aren't needed for building and running
+Dockerfile*
+.dockerignore
+node_modules
+README.md
+.next
+.git
+.idea
+.husky
+doc
+# These are added at runtime, from current folder into docker container environments.
+.env
+.env.*

@@ -1,0 +1,49 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+model User {
+  id String @id @default(cuid())
+
+  username String @unique @db.VarChar(20)
+  password String @db.VarChar(255)
+  logins   Int    @default(1)
+
+  currency FiatCurrency @default(eur)
+  score    Int          @default(0)
+
+  orders Order[]
+
+  @@index([id])
+  @@index([username])
+}
+
+model Order {
+  id     String  @id @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @db.VarChar(25)
+
+  // itemId, etc
+  quantity Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+  @@index([userId])
+}
+
+enum FiatCurrency {
+  eur
+  usd
+  gbp
+  cny
+  chf
+  jpy
+}
