@@ -21,4 +21,6 @@ Open http://127.0.0.1
 - Redis Cache
 - Postgres Database
 - Works without JS enabled for maximum security (+ shows deeper knowledge of the underlying framework)
+- CSRF protection through request headers check + exclusive POST requests
+- Basic Secure Authentication
 - 

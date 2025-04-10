@@ -1,7 +1,15 @@
 import { getPathname } from "lib/utils"
+import { cookies } from "next/headers"
+import { getIronSession } from "iron-session"
+import { SessionData, sessionOptions } from "@/auth"
+import { redirect } from "next/navigation"
 
 export default async function Header() {
   const pathname = await getPathname()
+
+  const cookieStore = await cookies()
+  const session = await getIronSession<SessionData>(cookieStore, sessionOptions)
+
   return (
     <header className="bg-slate-800">
       <nav className="border-gray-200 bg-gray-900">
@@ -21,26 +29,38 @@ export default async function Header() {
                   }
                 >Home</a>
               </li>
-              <li>
-                <a
-                  href="/login"
-                  className={
-                    `block py-2 px-3 rounded-sm md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent
+              {!session?.isLoggedIn
+               ? <>
+                 <li>
+                   <a
+                     href="/signin"
+                     className={
+                       `block py-2 px-3 rounded-sm md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent
                   ${pathname === "login" && "hover:text-white md:text-blue-500"}
                   `
-                  }
-                >Login</a>
-              </li>
-              <li>
-                <a
-                  href="/signup"
-                  className={
-                    `block py-2 px-3 rounded-sm md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent
+                     }
+                   >Login</a>
+                 </li>
+                 <li>
+                   <a
+                     href="/signup"
+                     className={
+                       `block py-2 px-3 rounded-sm md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent
                   ${pathname === "signup" && "hover:text-white md:text-blue-500"}
                   `
-                  }
-                >Signup</a>
-              </li>
+                     }
+                   >Signup</a>
+                 </li>
+               </> : <li>
+                  <form
+                    action="/api/signout"
+                    method="post"
+                    className="hover:text-orange-500"
+                  >
+                    <button type="submit" className="cursor-pointer">Logout</button>
+                  </form>
+               </li>}
+
             </ul>
           </div>
         </div>
