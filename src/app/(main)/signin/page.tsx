@@ -22,7 +22,7 @@ export default async function Signin() {
 
   return (
     <div>
-      <h3 className="text-2xl text-center my-10 font-semibold">Sign up to Sample App</h3>
+      <h3 className="text-2xl text-center my-10 font-semibold">Sign in to Sample App</h3>
       <form
         action="/api/signin"
         method="post"

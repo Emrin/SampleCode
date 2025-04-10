@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getIronSession } from "iron-session"
+import { SessionData, sessionOptions } from "src/auth"
 import { Locale, i18nConfig } from "@/i18n"
 import { match as matchLocale } from "@formatjs/intl-localematcher"
 import Negotiator from "negotiator"
+import { RequestCookies, ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies"
 
 export const ALLOWED_ORIGINS = new Set(process.env.ALLOWED_ORIGINS!.split(","))
 
@@ -12,13 +15,17 @@ export default async function middleware(request: NextRequest) {
   }
 
   const requestHeaders = new Headers(request.headers)
-  requestHeaders.set("x-url", request.url)
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   })
 
+  /*
+   * Auth
+   * */
+  const session = await getIronSession<SessionData>(request, response, sessionOptions)
+  // console.log("MDW Session =", session)
 
   /*
    * I18n
@@ -37,6 +44,20 @@ export default async function middleware(request: NextRequest) {
     })
   }
 
+  // Optionally fetch and update user session data on every new page visit
+
+  let successPopup = undefined
+  let failPopup = undefined
+  if (session?.successPopup) {
+    successPopup = session.successPopup
+    session.successPopup = undefined
+  }
+  if (session?.failPopup) {
+    failPopup = session.failPopup
+    session.failPopup = undefined
+  }
+  await session.save()
+  applySetCookie(request, response, successPopup, failPopup)
   return response
 }
 
@@ -47,6 +68,30 @@ export const config = {
     // - … the ones containing a dot (e.g. `favicon.ico`)
     "/((?!_next|.*\\..*).*)",
   ],
+}
+
+/**
+ * Copy cookies from the Set-Cookie header of the response to the Cookie header of the request,
+ * so that it will appear to SSR/RSC as if the user already has the new cookies.
+ */
+function applySetCookie(req: NextRequest, res: NextResponse, successPopup: string | undefined, failPopup: string | undefined): void {
+  // parse the outgoing Set-Cookie header
+  const setCookies = new ResponseCookies(res.headers)
+  // Build a new Cookie header for the request by adding the setCookies
+  const newReqHeaders = new Headers(req.headers)
+  newReqHeaders.set("x-url", req.url)
+  if (successPopup) newReqHeaders.set("successPopup", successPopup.toString())
+  if (failPopup) newReqHeaders.set("failPopup", failPopup)
+  const newReqCookies = new RequestCookies(newReqHeaders)
+  setCookies.getAll().forEach((cookie) => newReqCookies.set(cookie))
+  // set “request header overrides” on the outgoing response
+  NextResponse.next({
+    request: { headers: newReqHeaders },
+  }).headers.forEach((value, key) => {
+    if (key === "x-middleware-override-headers" || key.startsWith("x-middleware-request-")) {
+      res.headers.set(key, value)
+    }
+  })
 }
 
 function getLocale(request: NextRequest): string | undefined {
@@ -67,7 +112,7 @@ function getLocale(request: NextRequest): string | undefined {
   return locale
 }
 
-export function isValidRequestOrigin(request: Request) {
+function isValidRequestOrigin(request: Request) {
   const originHeader = request.headers.get("origin")
   const refererHeader = request.headers.get("referer")
   const hostHeader = request.headers.get("host") || request.headers.get("x-forwarded-host")

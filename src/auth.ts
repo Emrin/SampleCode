@@ -3,7 +3,7 @@ import { SessionOptions } from "iron-session"
 import { currencyValues } from "lib/data/currencies"
 
 export interface SessionData {
-  id: string // To find in DB. Refreshed in login/logout. Virtual or real.
+  id: string
   isLoggedIn: boolean
   userId: string | undefined
   username: string | undefined

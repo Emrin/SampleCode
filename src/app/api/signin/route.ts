@@ -1,9 +1,5 @@
 "use server"
 
-/*
- * Called when user submits the login form.
- * */
-
 import { z } from "zod"
 import { getIronSession } from "iron-session"
 import { SessionData, sessionOptions } from "src/auth"
@@ -75,7 +71,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Log user in new session.
-    session.id = getRandomHexString(16) // Update session id
+    session.id = getRandomHexString(16)
     session.isLoggedIn = true
     session.createdAt = new Date().getTime()
     session.userId = user.id
