@@ -3,19 +3,22 @@ const config = {
     "@tailwindcss/postcss",
     // Add cssnano in production
     ...(process.env.NODE_ENV === "production"
-        ? {
-        cssnano: {
-          preset: [
-            "default",
-            {
-              discardComments: {
-                removeAll: true,
+        ? [
+        [
+          "cssnano",
+          {
+            preset: [
+              "default",
+              {
+                discardComments: {
+                  removeAll: true,
+                },
               },
-            },
-          ],
-        },
-      }
-        : {}),
+            ],
+          },
+        ],
+      ]
+        : []),
   ],
 };
 

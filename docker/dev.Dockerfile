@@ -36,4 +36,5 @@ ENV DOCKER 1
 
 # Note: Don't expose ports here, Compose will handle that for us
 
-CMD npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npm run dev
+CMD npx prisma migrate dev && npx prisma db seed && npm run dev
+#CMD npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npm run dev
