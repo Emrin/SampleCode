@@ -1,0 +1,9 @@
+echo "Starting pre-commit tasks..."
+
+echo "Running type-check..."
+npm run type-check
+
+echo "Running lint-staged..."
+npx lint-staged
+
+echo "Pre-commit tasks completed."
