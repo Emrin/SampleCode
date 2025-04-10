@@ -24,6 +24,7 @@ model User {
   @@index([username])
 }
 
+// Scrapping this in favor of guessing game
 model Order {
   id     String  @id @default(cuid())
   user   User?   @relation(fields: [userId], references: [id])

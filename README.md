@@ -6,6 +6,18 @@ npm run dev:docker:bump
 ```
 Click -> http://127.0.0.1 <-
 
+### Develop Locally
+```npm
+# Install
+npm i
+# Synchronize DB if not done yet:
+npx prisma migrate dev
+# Refresh Typing (migrate dev does this already)
+npx prisma generate
+# Run
+npm run dev
+```
+
 ## Tech
 - Docker-Compose (Deployment)
 - TypeScript (Language)
@@ -38,13 +50,17 @@ Click -> http://127.0.0.1 <-
 - Health Checks
 
 # Potential improvements on this demo
+- [ ] Game: Show pictures of animals and ask users to guess characteristics such as extinction date, size, weight
+  - Users get a score based on how close their guesses were
+  - Animals from 30000BCE to present
+  - Maybe also add civilizations (other characteristics: time period, active for, area)
+  - Historic figures? E.g. Caesar, Temugin/Genghis Khan, Alexander the Great, Miyamoto Musashi
+  - Historic figures is probably more interesting... hmmm
 - [ ] Populate DB with data
-- [ ] Live Chat
-- [ ] User roles
 - [ ] Rate-Limiting with Redis
 - [ ] Image uploads
 - [ ] Pagination
 - [ ] Tests
 - [ ] Background Tasks
+- [ ] Make pretty
 - [ ] Track metrics
-- [ ] Extinction quiz
