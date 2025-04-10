@@ -22,14 +22,15 @@ Click -> http://127.0.0.1 <-
 # Features
 - One-Line Deployment with Docker Compose
 - I18n
-- Stateless Sessions
+- Stateless Encrypted Sessions
 - Redis Cache
 - Postgres Database
 - Works without JS enabled for maximum security (+ demonstrates a deeper understanding of the underlying frameworks)
 - CSRF protection through request headers check + exclusive POST requests
 - Basic Secure Authentication
+- API Routes
 - Form Validation with Zod
-- Tailwind UI
+- TailwindCSS UI
 - ESLint + Prettier
 - CommitLint
 - Husky commit scripts
@@ -37,10 +38,13 @@ Click -> http://127.0.0.1 <-
 - Health Checks
 
 # Potential improvements on this demo
+- [ ] Populate DB with data
+- [ ] Live Chat
 - [ ] User roles
 - [ ] Rate-Limiting with Redis
 - [ ] Image uploads
 - [ ] Pagination
+- [ ] Tests
 - [ ] Background Tasks
 - [ ] Track metrics
-- [ ] 
+- [ ] Extinction quiz
