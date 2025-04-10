@@ -1,6 +1,10 @@
+import { ReactNode } from "react"
 import "styles/globals.css"
 import { createTranslator, getCookieLang } from "@/i18n"
 
+type Props = {
+  children: ReactNode
+}
 
 export async function generateMetadata() {
   const locale = await getCookieLang()
@@ -15,17 +19,12 @@ export async function generateMetadata() {
   }
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Props) {
+  const lang = await getCookieLang()
+
   return (
-    <html
-      lang="en"
-      className="bg-slate-900 text-slate-100 min-h-screen"
-    >
-    <body>
+    <html lang={lang}>
+    <body className="bg-slate-900 text-slate-100">
     {children}
     </body>
     </html>
