@@ -14,3 +14,9 @@ Open http://127.0.0.1
 - Postgresql (DB)
 - Prisma (ORM)
 - Iron-Session (Stateless Authentication)
+
+# Features
+- I18n
+- Stateless Sessions
+- Redis Cache
+- Postgres Database
