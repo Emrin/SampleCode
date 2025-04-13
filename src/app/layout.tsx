@@ -12,7 +12,7 @@ export async function generateMetadata() {
 
   return {
     title: {
-      template: "%s / " + t("title"),
+      template: "%s — " + t("title"),
       default: t("title"),
     },
     description: t("description"),

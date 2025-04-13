@@ -15,6 +15,7 @@ model User {
   password String @db.VarChar(255) // Hash
   logins   Int    @default(1)
 
+  // language String       @default("en") @db.VarChar(2)
   currency FiatCurrency @default(eur)
   score    Int          @default(0)
 

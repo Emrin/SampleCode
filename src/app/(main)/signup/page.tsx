@@ -1,28 +1,28 @@
-// import { createTranslator, getCookieLang } from "@/i18n"
+import { createTranslator, getCookieLang } from "@/i18n"
 import { getIronSession } from "iron-session"
 import { SessionData, sessionOptions } from "src/auth"
-import { cookies, headers } from "next/headers"
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import React from "react"
 
 export async function generateMetadata() {
-  // const locale = await getCookieLang()
-  // const t = await createTranslator(locale, "Signup")
+  const locale = await getCookieLang()
+  const t = await createTranslator(locale, "Signup")
 
   return {
-    title: "Signup"
+    title: t("title")
   }
 }
-
 
 export default async function Signup() {
   const cookieStore = await cookies()
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions)
   if (session.isLoggedIn) redirect("/")
-
+  const locale = await getCookieLang()
+  const t = await createTranslator(locale, "Signup")
   return (
     <div>
-      <h3 className="text-2xl text-center my-10 font-semibold">Sign up to Sample App</h3>
+      <h3 className="text-2xl text-center my-10 font-semibold">{t("header")}</h3>
       <form
         action="/api/signup"
         method="post"
