@@ -1,6 +1,6 @@
 # Sample code and architecture
 
-# Run
+# Run in Docker
 ```npm
 npm run dev:docker:bump
 ```
@@ -50,7 +50,7 @@ npm run dev
 - Health Checks
 
 # Potential improvements on this demo
-- [ ] Game: Show pictures of animals and ask users to guess characteristics such as extinction date, size, weight
+- [x] Game: Show pictures of animals and ask users to guess characteristics such as extinction date, size, weight
   - Users get a score based on how close their guesses were
   - Animals from 30000BCE to present
   - Maybe also add civilizations (other characteristics: time period, active for, area)
