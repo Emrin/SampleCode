@@ -16,14 +16,23 @@ export default async function Home() {
 
       {session.isLoggedIn
        ? <div>
-         <p className="text-slate-300">
+         <p className="text-slate-300 pb-10">
            {t("visit")} <a href="/game" className="text-blue-400 hover:underline">{t("game")}</a> {t("play")}
          </p>
+         <div className="flex justify-center">
+           <a
+             href="/game"
+             className="text-white font-bold bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-800 rounded-lg px-10 py-5 text-center me-2 mb-2"
+           >Play NOW!!
+           </a>
+         </div>
        </div>
        : <div>
          <p className="text-slate-300">
-           <a href="/signin" className="text-blue-400 hover:underline"
-           >{t("login")}</a> {t("or")} <a href="/signup" className="text-blue-400 hover:underline"
+           <a
+             href="/signin" className="text-blue-400 hover:underline"
+           >{t("login")}</a> {t("or")} <a
+           href="/signup" className="text-blue-400 hover:underline"
          >{t("signup")}</a> {t("play")}
          </p>
        </div>

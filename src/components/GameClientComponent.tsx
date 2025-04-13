@@ -17,7 +17,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
   const [guessYear, setGuessYear] = useState("")
   const [guessDiet, setGuessDiet] = useState("")
   const [score, setScore] = useState(0)
-  const [feedback, setFeedback] = useState("")
+  const [feedback, setFeedback] = useState<React.ReactNode>(null)
   const [lastSubmission, setLastSubmission] = useState<Animal | null>(null)
 
   const clearGuesses = () => {
@@ -67,12 +67,14 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
 
       setScore((prevScore) => prevScore + totalPoints)
       setFeedback(
-        `Animal: ${currentAnimal.name}
-Actual extinction year: ${currentAnimal.extinctionYear}
-Year guess points: ${basePoints}
-${statusBonus ? "Status bonus: " + statusBonus + " points" : ""}
-${dietBonus ? "Diet bonus: " + dietBonus + " points" : ""}
-Total points earned: ${totalPoints}.`,
+        <div>
+          <p><strong>Animal:</strong> {currentAnimal.name}</p>
+          <p><strong>Actual extinction year:</strong> {currentAnimal.extinctionYear}</p>
+          <p><strong>Year guess points:</strong> {basePoints}</p>
+          {statusBonus ? <p><strong>Status bonus:</strong> {statusBonus} points</p> : null}
+          {dietBonus ? <p><strong>Diet bonus:</strong> {dietBonus} points</p> : null}
+          <p><strong>Total points earned:</strong> {totalPoints}</p>
+        </div>
       )
 
       setLastSubmission(currentAnimal)
@@ -126,7 +128,7 @@ Total points earned: ${totalPoints}.`,
         <h2 className="text-center text-slate-500 mb-10 text-xs">Great Job!</h2>
 
         <p className="text-center mb-10 font-bold">Your Score: {score}</p>
-        <p className="text-center">{feedback}</p>
+        <div className="text-center">{feedback}</div>
 
         <div className="flex justify-center">
           <button
@@ -229,7 +231,7 @@ Total points earned: ${totalPoints}.`,
         </form>
 
         {/* Feedback and score */}
-        <p className="text-center">{feedback}</p>
+        <div className="text-center">{feedback}</div>
         <p className="text-center font-bold underline decoration-cyan-500 decoration-dotted">Current Score: {score}</p>
 
         {/* Detailed information from the last submission */}
