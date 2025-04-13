@@ -18,6 +18,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
   const [guessDiet, setGuessDiet] = useState("")
   const [score, setScore] = useState(0)
   const [feedback, setFeedback] = useState("")
+  const [lastSubmission, setLastSubmission] = useState<Animal | null>(null)
 
   const clearGuesses = () => {
     setGuessStatus("")
@@ -31,6 +32,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
     setCurrentIndex(0)
     setScore(0)
     setFeedback("")
+    setLastSubmission(null)
     clearGuesses()
   }, [])
 
@@ -58,33 +60,29 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
 
       const basePoints = calculateYearPoints(currentAnimal.extinctionYear, guessedYear)
 
-      let statusBonus = 0
-      if (guessStatus === currentAnimal.extinctionStatus) {
-        statusBonus = 20
-      }
-      let dietBonus = 0
-      if (guessDiet === currentAnimal.dietType) {
-        dietBonus = 20
-      }
+      const statusBonus = guessStatus === currentAnimal.extinctionStatus ? 20 : 0
+      const dietBonus = guessDiet === currentAnimal.dietType ? 20 : 0
 
       const totalPoints = basePoints + statusBonus + dietBonus
 
       setScore((prevScore) => prevScore + totalPoints)
       setFeedback(
-        `Animal: ${currentAnimal.name}  
-Actual extinction year: ${currentAnimal.extinctionYear}  
-Your year guess earned: ${basePoints} points.  
-${guessStatus === currentAnimal.extinctionStatus ? "Status bonus: " + statusBonus + " points." : ""}  
-${guessDiet === currentAnimal.dietType ? "Diet bonus: " + dietBonus + " points." : ""}  
-Total points: ${totalPoints}.`,
+        `Animal: ${currentAnimal.name}
+Actual extinction year: ${currentAnimal.extinctionYear}
+Year guess points: ${basePoints}
+${statusBonus ? "Status bonus: " + statusBonus + " points" : ""}
+${dietBonus ? "Diet bonus: " + dietBonus + " points" : ""}
+Total points earned: ${totalPoints}.`,
       )
+
+      setLastSubmission(currentAnimal)
 
       clearGuesses()
 
       if (currentIndex < animals.length - 1) {
         setCurrentIndex((prevIndex) => prevIndex + 1)
       } else {
-        setFeedback((prev) => prev + " Game over!")
+        setFeedback((prev) => prev + "\nGame over!")
         setGameOver(true)
       }
     },
@@ -230,10 +228,45 @@ Total points: ${totalPoints}.`,
           </div>
         </form>
 
+        {/* Feedback and score */}
         <p className="text-center">{feedback}</p>
-        <p className="text-center">Current Score: {score}</p>
-      </div>
+        <p className="text-center font-bold underline decoration-cyan-500 decoration-dotted">Current Score: {score}</p>
 
+        {/* Detailed information from the last submission */}
+        {lastSubmission && (
+          <div className="mt-10 p-5 bg-slate-900 rounded-xl">
+            <h2 className="text-xl text-center font-bold">{lastSubmission.name} Details</h2>
+            <Image
+              src={`/animals/${lastSubmission.image}`}
+              alt={lastSubmission.name}
+              width={300}
+              height={300}
+              className="mx-auto my-4"
+            />
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Extinction Date:</strong> {lastSubmission.extinctionDateText}
+            </p>
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Habitat:</strong> {lastSubmission.habitat}
+            </p>
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Size:</strong> {lastSubmission.size} m
+            </p>
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Weight:</strong> {lastSubmission.weight} kg
+            </p>
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Diet:</strong> {lastSubmission.diet}
+            </p>
+            <p className="text-sm text-gray-300 mb-1">
+              <strong>Unique Traits:</strong> {lastSubmission.uniqueTraits}
+            </p>
+            <p className="text-sm text-gray-300">
+              <strong>Fun Facts:</strong> {lastSubmission.funFacts}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
-  )
+)
 }
