@@ -17,7 +17,6 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
 
   return (
     <div>
-
       {!gameStarted
        ? <>
          <h1 className="text-2xl text-center font-semibold">Welcome to the Guessing Game!</h1>
@@ -43,29 +42,48 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
            >Start Game
            </button>
          </div>
-
        </>
        : <div>
          <h1 className="text-2xl text-center mb-10 font-semibold">Playing the Guessing Game!</h1>
 
          {/* Game */}
          <div className="container mx-auto bg-slate-800 flex flex-col rounded-xl p-5">
+           <span className="text-sm text-center">Guess 1:</span>
            <h1 className="text-2xl text-center font-semibold">
-             {animals[0].name}
+             {animals[3].name}
            </h1>
            <Image
-             src={`/animals/${animals[0].image}`}
+             src={`/animals/${animals[3].image}`}
              alt="Quiz Image"
              width={400}
              height={400}
              className="mx-auto"
            />
 
+           {/* Form */}
+
+           <div className="w-68 mx-auto mt-4">
+             <label htmlFor="status" className="block mb-2 text-sm text-white">
+               Extinction Status
+             </label>
+             <select
+               id="status"
+               defaultValue={"Extinct"}
+               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             >
+               <option value="Extinct">Extinct</option>
+               <option value="NotExtinct">Not Extinct</option>
+               <option value="Deextincting">Deextincting</option>
+             </select>
+           </div>
+
+           {/* Year */}
            <div className="w-68 mx-auto mt-4">
              <label
                htmlFor="extinction_year"
-               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-               Guess the Extinction Year
+               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+             >
+               Extinction Year
              </label>
              <input
                type="number"
@@ -78,7 +96,32 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
                Enter year number, negative for BCE.
              </span>
            </div>
-           #TODO complete
+
+           {/* Diet */}
+           <div className="w-68 mx-auto mt-4">
+             <label htmlFor="diet" className="block mb-2 text-sm text-white">
+               Diet
+             </label>
+             <select
+               id="diet"
+               defaultValue={"Carnivore"}
+               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             >
+               <option value="Carnivore">Carnivore</option>
+               <option value="Herbivore">Herbivore</option>
+               <option value="Omnivore">Omnivore</option>
+             </select>
+           </div>
+
+           {/* Next button */}
+           <div className="mx-auto p-10">
+             <button
+               type="button"
+               className="cursor-pointer text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-semibold rounded-lg px-5 py-2.5 text-center me-2 mb-2"
+             >Next Guess
+             </button>
+           </div>
+
          </div>
 
        </div>}

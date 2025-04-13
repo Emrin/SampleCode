@@ -31,6 +31,12 @@ enum ExtinctionStatus {
   NotExtinct
 }
 
+enum DietType {
+  Carnivore
+  Herbivore
+  Omnivore
+}
+
 model Animal {
   id                 String           @id @default(cuid())
   name               String           @unique @db.VarChar(100)
@@ -41,6 +47,7 @@ model Animal {
   weight             Float
   habitat            String           @db.VarChar(1000)
   diet               String           @db.VarChar(1000)
+  dietType           DietType         @default(Carnivore)
   uniqueTraits       String           @db.VarChar(1000)
   funFacts           String           @db.VarChar(1000)
   image              String           @db.VarChar(1000)
