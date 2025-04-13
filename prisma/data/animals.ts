@@ -59,7 +59,7 @@ export const animals: Animal[] = [
   },
   {
     name: "Dire Wolf",
-    extinctionStatus: ExtinctionStatus.Extinct,
+    extinctionStatus: ExtinctionStatus.Deextincting,
     extinctionDateText: "Approximately 12,500 years ago",
     extinctionYear: -12500,
     size: 1.5,
