@@ -6,6 +6,7 @@ import redis from "lib/redis"
 import { z } from "zod"
 import { getIronSession } from "iron-session"
 import { SessionData, sessionOptions } from "@/auth"
+import { getLeaderboard } from "lib/getLeaderboard"
 
 const schema = z.object({
   score: z.number({ coerce: true }).min(0).max(10000),
@@ -14,6 +15,7 @@ const schema = z.object({
 export async function POST(request: Request, response: NextResponse) {
   try {
     const { score } = await request.json()
+    // console.log("Saving new score of", score)
 
     const validatedFields = schema.safeParse({
       score,
@@ -34,20 +36,50 @@ export async function POST(request: Request, response: NextResponse) {
       )
     }
 
-    const updatedUser = await prisma.user.update({
-      where: { id: session.userId },
-      data: {
-        score,
-      },
+    await prisma.$transaction(async (prisma) => {
+      const leaderboard = await prisma.leaderboard.findUnique({
+        where: { userId: session.userId },
+      })
+
+      if (leaderboard) {
+        // Update
+        const newBestScore = score > leaderboard.bestScore ? score : leaderboard.bestScore
+        const newAverageScore = leaderboard.totalScore / leaderboard.playedGames
+        const updatedUserLeaderboard = await prisma.leaderboard.update({
+          where: { userId: session.userId },
+          data: {
+            playedGames: { increment: 1 },
+            totalScore: { increment: score },
+            bestScore: newBestScore,
+            averageScore: newAverageScore,
+          },
+        })
+        // console.log("Updated user's leaderboard:", updatedUserLeaderboard)
+      } else {
+        // Create
+        const newLeaderboard = await prisma.leaderboard.create({
+          data: {
+            userId: session.userId!,
+            username: session.username!,
+            playedGames: 1,
+            totalScore: score,
+            bestScore: score,
+            averageScore: score,
+          },
+        })
+        // console.log("Created new leaderboard:", newLeaderboard)
+      }
     })
 
     // Invalidate cached leaderboard data
     await redis.del("leaderboard")
 
-    return NextResponse.json(
-      { message: "Score saved successfully", updatedUser },
-      { status: 200 },
-    )
+    // Repopulate cache and fetch
+    const globalLeaderboard = await getLeaderboard()
+
+    // Return leaderboards
+    return NextResponse.json(globalLeaderboard)
+
   } catch (error) {
     console.error(error)
     return NextResponse.json(

@@ -47,7 +47,7 @@ export const animals: Animal[] = [
   {
     name: "Dire Wolf",
     extinctionStatus: ExtinctionStatus.Deextincting,
-    extinctionDateText: "Approximately 12,500 years ago",
+    extinctionDateText: "Recently de-extincted via advanced genetic techniques. Previously extinct approximately 12,500 years ago.",
     extinctionYear: -12500,
     size: 1.5,
     weight: 80,
@@ -55,7 +55,7 @@ export const animals: Animal[] = [
     diet: "Large herbivores such as bison and horses",
     dietType: DietType.Carnivore,
     uniqueTraits: "Robust build and powerful jaws capable of crushing bone",
-    funFacts: "They were social pack hunters, similar to modern wolves.",
+    funFacts: "Following breakthrough de-extinction efforts using preserved DNA and CRISPR technology, dire wolves have been revived. Early observations suggest they maintain their characteristic pack hunting behavior, offering scientists a unique glimpse into Pleistocene ecology.",
     image: "dire-wolf.webp",
   },
   {

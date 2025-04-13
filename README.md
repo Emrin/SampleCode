@@ -1,12 +1,21 @@
-# Sample code and architecture
+# Play The Guessing Game: A Demo Full-Stack Platform
+This is a full-stack demo application,
+it allows users to create an account and play a Guessing Game.
 
-# Run in Docker
+It is built with TypeScript, React, Next.js, a Postgres db, Prisma ORM,
+a redis cache, a Nginx reverse proxy, Docker, and Docker-Compose.
+
+See the specific sections below for a complete list of Features,
+Tech Tools, and running instructions.
+
+# Run
+### Run in Docker
 ```npm
 npm run dev:docker:bump
 ```
 Click -> http://127.0.0.1 <-
 
-### Develop Locally
+### Run in OS
 ```npm
 # Install
 npm i
@@ -54,9 +63,6 @@ Click -> http://127.0.0.1:3000 <-
 - [x] Game: Show pictures of animals and ask users to guess characteristics such as extinction date, size, weight
   - Users get a score based on how close their guesses were
   - Animals from 30000BCE to present
-  - Maybe also add civilizations (other characteristics: time period, active for, area)
-  - Historic figures? E.g. Caesar, Temugin/Genghis Khan, Alexander the Great, Miyamoto Musashi
-  - Historic figures is probably more interesting... hmmm
 - [x] Populate DB with data
 - [ ] Rate-Limiting with Redis
 - [ ] Image uploads

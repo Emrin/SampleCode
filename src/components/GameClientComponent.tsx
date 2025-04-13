@@ -36,6 +36,20 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
     clearGuesses()
   }, [])
 
+  const saveFinalScore = async (finalScore: number) => {
+    try {
+      const response = await fetch("/api/saveScore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ score: finalScore }),
+      })
+      const data = await response.json()
+      // console.log("Leaderboard =", data)
+    } catch (error) {
+      console.error("Error saving score:", error)
+    }
+  }
+
   const handleSubmitGuess = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
@@ -65,7 +79,8 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
 
       const totalPoints = basePoints + statusBonus + dietBonus
 
-      setScore((prevScore) => prevScore + totalPoints)
+      const newScore = score + totalPoints
+      setScore(newScore)
       setFeedback(
         <div>
           <p><strong>Animal:</strong> {currentAnimal.name}</p>
@@ -85,24 +100,11 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         setCurrentIndex((prevIndex) => prevIndex + 1)
       } else {
         setGameOver(true)
-        saveFinalScore()
+        saveFinalScore(newScore);
       }
     },
-    [animals, currentIndex, guessStatus, guessYear, guessDiet],
+    [animals, currentIndex, guessStatus, guessYear, guessDiet, score],
   )
-
-  const saveFinalScore = async () => {
-    try {
-      const response = await fetch("/api/saveScore", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score }),
-      })
-      const data = await response.json()
-    } catch (error) {
-      console.error("Error saving score:", error)
-    }
-  }
 
   if (!gameStarted) {
     return (
