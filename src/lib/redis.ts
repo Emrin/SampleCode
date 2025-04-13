@@ -6,7 +6,7 @@ import Redis, { RedisOptions } from "ioredis"
 
 const redisClientSingleton = () => {
   const options: RedisOptions = {
-    host: process.env.DOCKER ? process.env.REDIS_HOST : "localhost",
+    host: process.env.DOCKER ? process.env.REDIS_HOST : "127.0.0.1",
     lazyConnect: true,
     showFriendlyErrorStack: true,
     enableAutoPipelining: true,

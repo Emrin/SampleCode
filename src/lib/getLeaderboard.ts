@@ -4,7 +4,7 @@ import redis from "lib/redis"
 export async function getLeaderboard() {
   const key = "leaderboard"
   const cached = await redis.get(key)
-  let leaderboard
+  let leaderboard = []
 
   if (cached) {
     /*
@@ -20,7 +20,6 @@ export async function getLeaderboard() {
       orderBy: { averageScore: "desc" },
       take: 10,
     })
-    if (!leaderboard) throw new Error("Leaderboard not found")
 
     // Cache the result for 5 minutes
     const MAX_AGE_SECONDS = 60 * 5; // 5 minutes
