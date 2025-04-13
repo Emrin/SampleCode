@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import prisma from "lib/prisma"
 import React from "react"
 import GameClientComponent from "components/GameClientComponent"
+import { getLeaderboard } from "lib/getLeaderboard"
 
 const QUIZ_LENGTH = 10
 
@@ -14,7 +15,7 @@ export async function generateMetadata() {
   const t = await createTranslator(locale, "Game")
 
   return {
-    title: t("title")
+    title: t("title"),
   }
 }
 
@@ -31,9 +32,15 @@ export default async function Game() {
     take: QUIZ_LENGTH,
   })
 
+  const globalLeaderboard = await getLeaderboard()
+
   return (
     <div>
-      <GameClientComponent animalsCount={animalsCount} animals={animals} />
+      <GameClientComponent
+        animalsCount={animalsCount}
+        animals={animals}
+        globalLeaderboard={globalLeaderboard}
+      />
     </div>
-  );
+  )
 }

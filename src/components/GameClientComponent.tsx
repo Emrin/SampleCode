@@ -4,12 +4,24 @@ import Image from "next/image"
 import { calculateYearPoints } from "lib/game"
 import type { Animal } from "@prisma/client"
 
+type LeaderboardEntry = {
+  id: number
+  userId: string
+  username: string
+  playedGames: number
+  totalScore: number
+  bestScore: number
+  averageScore: number
+  updatedAt: Date
+}
+
 type GameClientComponentProps = {
   animalsCount: number
   animals: Animal[]
+  globalLeaderboard: LeaderboardEntry[]
 }
 
-export default function GameClientComponent({ animalsCount, animals }: GameClientComponentProps) {
+export default function GameClientComponent({ animalsCount, animals, globalLeaderboard }: GameClientComponentProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const [gameOver, setGameOver] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -19,6 +31,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
   const [score, setScore] = useState(0)
   const [feedback, setFeedback] = useState<React.ReactNode>(null)
   const [lastSubmission, setLastSubmission] = useState<Animal | null>(null)
+  const [leaderboard, setLeaderboard] = useState<any[]>([])
 
   const clearGuesses = () => {
     setGuessStatus("")
@@ -44,7 +57,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         body: JSON.stringify({ score: finalScore }),
       })
       const data = await response.json()
-      // console.log("Leaderboard =", data)
+      setLeaderboard(data)
     } catch (error) {
       console.error("Error saving score:", error)
     }
@@ -124,6 +137,37 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         </div>
         <p className="text-center py-10">There are currently {animalsCount} recorded animals!</p>
 
+        {/* Leaderboard */}
+        {globalLeaderboard.length > 0 && (
+          <div className="w-full max-w-xl mx-auto mb-10">
+            <h2 className="text-xl font-bold text-center mb-4">Global Leaderboard</h2>
+            <table className="w-full border-collapse">
+              <thead>
+              <tr>
+                <th className="border px-4 py-2">Rank</th>
+                <th className="border px-4 py-2">Username</th>
+                <th className="border px-4 py-2">Played Games</th>
+                <th className="border px-4 py-2">Best Score</th>
+                <th className="border px-4 py-2">Average Score</th>
+              </tr>
+              </thead>
+              <tbody>
+              {globalLeaderboard.map((entry, index) => (
+                <tr key={entry.id}>
+                  <td className="border px-4 py-2 text-center">{index + 1}</td>
+                  <td className="border px-4 py-2 text-center">{entry.username}</td>
+                  <td className="border px-4 py-2 text-center">{entry.playedGames}</td>
+                  <td className="border px-4 py-2 text-center">{entry.bestScore}</td>
+                  <td className="border px-4 py-2 text-center">
+                    {entry.averageScore.toFixed(1)}
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         <div className="flex justify-center">
           <button
             type="button"
@@ -143,6 +187,37 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         <h2 className="text-center text-slate-500 mb-10 text-xs">Great Job!</h2>
 
         <p className="text-center mb-10 font-bold underline decoration-cyan-500 decoration-dotted">Your Score: {score}</p>
+
+        {/* Leaderboard */}
+        {leaderboard.length > 0 && (
+          <div className="w-full max-w-xl mx-auto mb-10">
+            <h2 className="text-xl font-bold text-center mb-4">Global Leaderboard</h2>
+            <table className="w-full border-collapse">
+              <thead>
+              <tr>
+                <th className="border px-4 py-2">Rank</th>
+                <th className="border px-4 py-2">Username</th>
+                <th className="border px-4 py-2">Played Games</th>
+                <th className="border px-4 py-2">Best Score</th>
+                <th className="border px-4 py-2">Average Score</th>
+              </tr>
+              </thead>
+              <tbody>
+              {leaderboard.map((entry, index) => (
+                <tr key={entry.id}>
+                  <td className="border px-4 py-2 text-center">{index + 1}</td>
+                  <td className="border px-4 py-2 text-center">{entry.username}</td>
+                  <td className="border px-4 py-2 text-center">{entry.playedGames}</td>
+                  <td className="border px-4 py-2 text-center">{entry.bestScore}</td>
+                  <td className="border px-4 py-2 text-center">
+                    {entry.averageScore.toFixed(1)}
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <div className="text-center">{feedback}</div>
         <div className="flex justify-center mt-10">

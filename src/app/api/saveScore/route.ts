@@ -43,8 +43,10 @@ export async function POST(request: Request, response: NextResponse) {
 
       if (leaderboard) {
         // Update
+        const newTotalScore = leaderboard.totalScore + score
+        const newPlayedGames = leaderboard.playedGames + 1
+        const newAverageScore = newTotalScore / newPlayedGames
         const newBestScore = score > leaderboard.bestScore ? score : leaderboard.bestScore
-        const newAverageScore = leaderboard.totalScore / leaderboard.playedGames
         const updatedUserLeaderboard = await prisma.leaderboard.update({
           where: { userId: session.userId },
           data: {
