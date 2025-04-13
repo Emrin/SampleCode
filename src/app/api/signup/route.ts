@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "lib/prisma"
 import { getRandomHexString, getReferer } from "lib/utils"
 import { hash } from "bcryptjs"
+import { cookies } from "next/headers"
 
 const schema = z.object({
   username: z.string().trim().min(3).max(20).regex(/^[a-zA-Z0-9_]+$/),
@@ -66,12 +67,15 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hash(validatedFields.data.password, 12)
 
+    const cookieStore = await cookies()
+
     await prisma.$transaction(async (prisma) => {
       // Create the new user
       const user = await prisma.user.create({
         data: {
           username: validatedFields.data.username,
           password: passwordHash,
+          language: cookieStore.get("lang")?.value || "en",
         },
         select: {
           id: true,

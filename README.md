@@ -17,6 +17,7 @@ npx prisma generate
 # Run
 npm run dev
 ```
+Click -> http://127.0.0.1:3000 <-
 
 ## Tech
 - Docker-Compose (Deployment)
@@ -56,7 +57,7 @@ npm run dev
   - Maybe also add civilizations (other characteristics: time period, active for, area)
   - Historic figures? E.g. Caesar, Temugin/Genghis Khan, Alexander the Great, Miyamoto Musashi
   - Historic figures is probably more interesting... hmmm
-- [ ] Populate DB with data
+- [x] Populate DB with data
 - [ ] Rate-Limiting with Redis
 - [ ] Image uploads
 - [ ] Pagination

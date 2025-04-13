@@ -74,7 +74,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
           {statusBonus ? <p><strong>Status bonus:</strong> {statusBonus} points</p> : null}
           {dietBonus ? <p><strong>Diet bonus:</strong> {dietBonus} points</p> : null}
           <p><strong>Total points earned:</strong> {totalPoints}</p>
-        </div>
+        </div>,
       )
 
       setLastSubmission(currentAnimal)
@@ -84,12 +84,25 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
       if (currentIndex < animals.length - 1) {
         setCurrentIndex((prevIndex) => prevIndex + 1)
       } else {
-        setFeedback((prev) => prev + "\nGame over!")
         setGameOver(true)
+        saveFinalScore()
       }
     },
     [animals, currentIndex, guessStatus, guessYear, guessDiet],
   )
+
+  const saveFinalScore = async () => {
+    try {
+      const response = await fetch("/api/saveScore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ score }),
+      })
+      const data = await response.json()
+    } catch (error) {
+      console.error("Error saving score:", error)
+    }
+  }
 
   if (!gameStarted) {
     return (
@@ -113,7 +126,7 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
           <button
             type="button"
             onClick={handleStartGame}
-            className="cursor-pointer font-bold text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-800 rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            className="cursor-pointer font-bold text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-800 shadow-lg shadow-green-800/80 rounded-lg px-5 py-2.5 text-center me-2 mb-2"
           >Start Game
           </button>
         </div>
@@ -127,17 +140,54 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         <h1 className="text-2xl text-center font-semibold">Guessing Game Complete!</h1>
         <h2 className="text-center text-slate-500 mb-10 text-xs">Great Job!</h2>
 
-        <p className="text-center mb-10 font-bold">Your Score: {score}</p>
-        <div className="text-center">{feedback}</div>
+        <p className="text-center mb-10 font-bold underline decoration-cyan-500 decoration-dotted">Your Score: {score}</p>
 
-        <div className="flex justify-center">
+        <div className="text-center">{feedback}</div>
+        <div className="flex justify-center mt-10">
           <button
             type="button"
             onClick={handleStartGame}
-            className="cursor-pointer font-bold text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-800 rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            className="cursor-pointer font-bold text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-800 shadow-lg shadow-green-800/80 rounded-lg px-5 py-2.5 text-center me-2 mb-2"
           >Play Again
           </button>
         </div>
+
+        {/* Detailed information from the last submission */}
+        {lastSubmission && (
+          <div className="container w-[500] mx-auto flex justify-center flex-col p-5 bg-slate-900 rounded-xl">
+            <div className="flex justify-center flex-col mt-10 p-5 bg-slate-800 rounded-xl">
+              <h2 className="text-xl text-center font-bold">{lastSubmission.name} Details</h2>
+              <Image
+                src={`/animals/${lastSubmission.image}`}
+                alt={lastSubmission.name}
+                width={300}
+                height={300}
+                className="mx-auto my-4"
+              />
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Extinction Date:</strong> {lastSubmission.extinctionDateText}
+              </p>
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Habitat:</strong> {lastSubmission.habitat}
+              </p>
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Size:</strong> {lastSubmission.size} m
+              </p>
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Weight:</strong> {lastSubmission.weight} kg
+              </p>
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Diet:</strong> {lastSubmission.diet}
+              </p>
+              <p className="text-sm text-gray-300 mb-1">
+                <strong>Unique Traits:</strong> {lastSubmission.uniqueTraits}
+              </p>
+              <p className="text-sm text-gray-300">
+                <strong>Fun Facts:</strong> {lastSubmission.funFacts}
+              </p>
+            </div>
+          </div>
+        )}
       </>
     )
   }
@@ -270,5 +320,5 @@ export default function GameClientComponent({ animalsCount, animals }: GameClien
         )}
       </div>
     </div>
-)
+  )
 }

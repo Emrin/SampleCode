@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
         username: true,
         password: true,
         currency: true,
+        language: true,
       },
     })
     if (!user || !(await compare(validatedFields.data.password, user.password))) {
@@ -77,6 +78,14 @@ export async function POST(request: NextRequest) {
     session.userId = user.id
     session.username = user.username
     session.currency = user.currency
+
+    // Synchronize locale
+    response.cookies.set("lang", user.language, {
+      path: "/",
+      httpOnly: false,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    })
 
   } catch (e) {
     // If there's an error, redirect back to log in page.
