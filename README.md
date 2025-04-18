@@ -17,12 +17,15 @@ Click -> http://127.0.0.1 <-
 
 ### Run in OS
 ```npm
+# Requires Postgresql and Redis, which are installed and configured by the above docker command.
 # Install
 npm i
 # Synchronize DB if not done yet:
 npx prisma migrate dev
 # Refresh Typing (migrate dev does this already)
 npx prisma generate
+# Seed DB (already done during docker installation)
+npm run prisma:seed
 # Run
 npm run dev
 ```
